@@ -1,0 +1,53 @@
+# ---- VeFi user data & runtime artifacts (never publish) ----
+# Local search library (per-user saved searches: params + parquet + raw JSON)
+data/
+# Per-VIN caches (VIN decode, listing extras, image links)
+extra/
+# Legacy pre-refactor code & the user's personal saved searches
+legacy/
+backups/
+# API request logs
+logs/
+
+# Loose data dumps from the old single-slot workflow
+*.parquet
+*.pkl
+dealer_search_results.json
+fsbo_search_results.json
+search_results.json
+response.json
+last_search_params*.pkl
+
+# Personal reference data (not used by the app)
+make-model.csv
+make-model/
+uct/
+scratchpad/
+
+# User settings & usage counter live in the home dir (~/.vefi/), never in-repo,
+# but ignore a project-local copy too, just in case.
+.vefi/
+.env
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.python-version
+
+# ---- Tooling / OS ----
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.streamlit/secrets.toml
+.idea/
+.vscode/
+.claude/
+.DS_Store
+Thumbs.db
