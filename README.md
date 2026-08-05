@@ -197,44 +197,6 @@ streamlit run app.py
 The app opens in your browser. On first launch it will prompt you for your
 MarketCheck key — paste it into **Settings**, save, and start searching.
 
-## How it works
-
-| Area | Where |
-|------|-------|
-| Static config (endpoints, paths, nationwide grid) | `vefi/config.py` |
-| API keys / quota limit (per user) | `~/.vefi/config.json` via `vefi/settings_store.py` |
-| MarketCheck call count | `~/.vefi/usage.json` via `vefi/usage.py` |
-| Saved searches | `data/searches/<slug>/` via `vefi/data/library.py` |
-| Per-VIN caches (decode, photos, listing extras) | `data/cache/` via `vefi/cache.py` |
-| Bundled make/model/body-type list | `vefi/resources/makes_models.json` via `vefi/taxonomy.py` |
-
-Everything under `data/` and `~/.vefi/` is local to you and is gitignored — your
-searches and keys never get committed.
-
-## Project layout
-
-```
-app.py                 Streamlit entry point (thin)
-vefi/
-  config.py            endpoints, paths, defaults, nationwide grid
-  settings_store.py    read/write API keys + quota limit
-  usage.py             persistent MarketCheck call counter
-  cache.py             on-disk caches for per-listing data
-  search.py            high-level search orchestration
-  pricing.py           price-vs-mileage deal model
-  mapping.py           Folium map builder
-  options_decode.py    VIN / listing option parsing
-  api/
-    marketcheck.py     MarketCheck client (meters + logs every call)
-    geocoding.py       pgeocode + keyless Census fallback
-    distance.py        haversine straight-line distance
-  data/
-    transform.py       MarketCheck JSON -> DataFrame
-    library.py         saved-search catalog
-  ui/                  Streamlit components (sidebar, search form, results, details, settings)
-tests/                 pytest suite for the pure logic
-```
-
 ## A bit of backstory on this project and what you can expect going forward
 
 VeFi started as a personal exercise to learn Python. At that time LLMs were just chat
