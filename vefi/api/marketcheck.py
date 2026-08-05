@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from logging.handlers import RotatingFileHandler
 from typing import Any, Callable, Iterable, Optional
@@ -25,6 +26,15 @@ from .. import config, usage
 from ..settings_store import get_marketcheck_key
 
 ProgressFn = Callable[[int, int, str], None]
+
+# The API key rides in the request URL/params, so it can appear verbatim in a
+# requests exception message. Redact it before anything is logged or shown to
+# the user (error text often ends up pasted into bug reports).
+_API_KEY_RE = re.compile(r"(api_key=)[^&\s\"']+", re.IGNORECASE)
+
+
+def _redact(text: Any) -> str:
+    return _API_KEY_RE.sub(r"\1***", str(text))
 
 
 class MarketCheckError(RuntimeError):
@@ -91,8 +101,11 @@ def _request(url: str, params: Optional[dict] = None, headers: Optional[dict] = 
     try:
         resp = requests.get(url, params=params, headers=req_headers, timeout=timeout)
     except requests.RequestException as exc:
-        logger.error("ERROR - %s - %s", url, exc)
-        raise MarketCheckError(f"Network error contacting MarketCheck: {exc}") from exc
+        detail = _redact(exc)  # the exception text can contain the api_key
+        logger.error("ERROR - %s - %s", url, detail)
+        # `from None` so the original (unredacted) exception isn't chained into a
+        # traceback that could surface the key.
+        raise MarketCheckError(f"Network error contacting MarketCheck: {detail}") from None
 
     logger.info("RESPONSE - STATUS %s - %s", resp.status_code, url)
     return resp
@@ -118,12 +131,14 @@ def paginated_search(base_url: str, params: dict, max_listings: Optional[int] = 
         resp = _request(base_url, params)
         try:
             resp.raise_for_status()
-        except requests.HTTPError as exc:
+        except requests.HTTPError:
             if all_listings:
                 break  # return what we have
+            # `from None`: the HTTPError message embeds the request URL (with the
+            # api_key), so don't chain it into a traceback.
             raise MarketCheckError(
                 f"MarketCheck returned HTTP {resp.status_code}."
-            ) from exc
+            ) from None
 
         last_page = resp.json()
         if total_listings is None:
