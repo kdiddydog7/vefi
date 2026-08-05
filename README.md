@@ -6,7 +6,7 @@
 <h1 align="center">VeFi — Vehicle Finder</h1>
 
 <p align="center">
-  Raw, unfiltered used-car data from MarketCheck — search, map, and find the real deals.
+  Find the real deals faster.
 </p>
 
 <p align="center">
