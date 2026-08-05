@@ -15,38 +15,32 @@
   <img src="https://img.shields.io/badge/UI-Streamlit-ff4b4b.svg" alt="Built with Streamlit">
 </p>
 
-VeFi is an open-source free used-car search and analysis tool built to use the [MarketCheck](https://www.marketcheck.com/)
+VeFi is an open-source used-car search and analysis tool built to use the [MarketCheck](https://www.marketcheck.com/)
 API. 
 
 VeFi fills some very specific gaps in the car shopping experience for people that 
 are shopping for special cars.  
 
 When you shop on any of the major car listing sites, after some time you begin
-to realize that the experience is really designed to benefit the
-dealerships paying for listings, not the consumers shopping. If you've ever
-copy-pasted listing details out of cartrader, carguru, truecar, etc., so you
-could paste it all into a spreadsheet and actually compare apples to apples, 
-you may find VeFi very useful when car shopping.
+to realize that the experience is actually designed to benefit the
+dealerships paying for listings, not the consumer. If you've ever
+copy-pasted details out of cartrader, carguru, truecar, etc., into a spreadsheet
+so you could actually compare apples to apples, VeFi might be useful to you. 
 
 ## Here's information VeFi gives you that the car listing sites don't
-When you search for cars in VeFi, what you get back is everything you need to
-compare cars based on all the data that matters for your search --summarized, 
-organized, and easily digested.
+When you search for cars in VeFi,you get back everything you need to compare cars 
+based on the data that matters for **your** search --summarized, organized, and 
+easily digested.
 
 ### The Price/Mile Graph
-Cars with less miles are worth more.  But how much more?  VeFi plots every car
-on a Price/Miles graph and shows you the trendline that instantly shows whether
-a given listing is above or below that trendline. carguru.com will tell you if a listing
-is a "good deal" but how do they determine that?  If you tell a dealership CarGuru
-says their listing is not a good deal, do you think they care and that will matters
-in negotiations?  If you show them 4 other similar cars with similar miles
-in the area that are less money, THAT is information they know you might walk
-based on.  
+Cars with less miles are worth more. But how much more?  VeFi plots every car
+on a Price/Miles graph and shows you the trendline that instantly reveals whether
+cars are above or below that trendline. 
 
 The trendline is simplistic; it doesn't factor in features, colors, etc. --just
 price and miles. But its simplicity is powerful: The trendline recalculates with 
 every filter you apply.  If you are only shopping for Volvo V60s with the Ultra 
-package, in 3 colors, you can filter to those and see the trendline.  
+package in only 3 colors, you can filter to those and see the trendline.  
 
 <table>
   <tr>
@@ -58,13 +52,11 @@ package, in 3 colors, you can filter to those and see the trendline.
 </table>  
 
 The trendline predicted price is also displayed in each listing's header. 
-If a car is under the predicted price, it will show a small green pill metric with a down
-arrow and the percentage under the predicted price. 
+If a car is under or over the predicted price, you know by exactly how much. 
 
 ### The Geo Map
 Eventually you are going venture out in the physical world of dealership lots, 
-and VeFi puts every car you search for on a super-responsive, easily panable and
-zoomable map. 
+and VeFi puts every car you search for on a super-responsive map you can navigate.
 
 <table>
   <tr>
@@ -75,15 +67,14 @@ zoomable map.
   </tr>
 </table>  
 
-And make sure to input your Zip Code in the filter criteria, even if you don't
-want to restrict to a distance.  By entering your Zip, a straight-line distance is
-calculated so you can prioritize closer cars. 
+And make sure to input your ZIP Code in the filter criteria, even if you don't
+want to restrict to a distance.  By entering your ZIP, a straight-line distance is
+calculated so you can sort and prioritize cars by distance.
 
 ### The Results table
 It's the most basic thing really. Put all the car details in a compact table to sort
-through.  Again, the listing sites don't really want you sorting all the cars this 
-efficiently. Those sites want you browsing page after page of horrible pictures 
-with minimal data beyond miles and price.  
+through. This is a lot more efficient than browsing page after page of horrible pictures 
+with minimal data.  
 
 <table>
   <tr>
@@ -120,21 +111,21 @@ import to your spreadsheet of choice.
 
 
 ## "Sounds pretty useful. What's the catch?"
-There is a catch. VeFi uses the Marketcheck API. The lowest paid tier for that 
+There is a catch. VeFi uses the MarketCheck API. The lowest paid tier for that 
 API is $300/month, plus sub-penny usage fees per API call.  That pricing is 
 completely unrealistic for single-purchase consumer car shopping.
 
-But Marketcheck DOES have a free tier:  500 API calls per month.  That's enough
+But MarketCheck DOES have a free tier:  500 API calls per month.  That's enough
 for effective use, if you are careful. 
 
 VeFi is designed to help you be careful.
 
 ### Close tracking of API calls
-When you input your Marketcheck API key, you will also see your call quota of 500 set. 
-Every call VeFi makes to MarketCheck is tracked so you can see your remaining capacity.
+When you input your MarketCheck API key, you will also see your call quota of 500 calls. 
+Every call VeFi makes to MarketCheck is tracked so you can monitor your remaining capacity.
 
 #### Nationwide searches
-Nationwide searches deserve more detailed explanation.  Marketcheck doesn't offer 
+Nationwide searches deserve more detailed explanation.  MarketCheck doesn't offer 
 the ability to do  a nationwide search in one call for the free tier, so VeFi uses
 a geographically distributed set of Lat/Long coordinates with a 100 mile radius 
 spacing to cover the US.  There are 68 unique points that are queried, so any nationwide
@@ -142,11 +133,12 @@ search will consume at least 68 of your 500 calls.
 
 68 calls is just where a nationwide search starts. If a single query has more than 50 matching 
 car listings, then results are paginated and require extra calls. A search in a dense 
-L.A. area / might generate 250 results, which is 5 calls for that one ZIP code. 
+L.A. area / might generate 250 results, which is 5 calls for that one area.
 
-Finally, an extra 6 calls are made up front to sample 6 representative regions.  VeFi
-estimates the total number of calls required to search nationwide based on that sample.
-You can either accept or cancel the search to refine your criteria more narrowly. 
+Finally, an extra 6 calls are made up front on each national search to sample 6 representative
+regions.  VeFi estimates the total number of calls required to search nationwide 
+based on the number of results returned in the sample.  You can either accept or cancel 
+the search to refine your criteria more narrowly. 
 
 <table>
   <tr>
@@ -160,8 +152,8 @@ You can either accept or cancel the search to refine your criteria more narrowly
 The bottom line is that if you are searching for the best deal on a 2000-2010 Camry
 nationwide, then VeFi isn't the tool for you. You will get 100s of listings in every
 ZIP code and exhaust your entire monthly quota before covering even 1/2
-the country.  If you are searching for an Alfa Giulia, you can search nationwide and 
-will likely use the minimum number of calls possible for a nationwide search.  
+the country.  On the other hand, if you are searching for an Alfa Giulia, you can search n
+ationwide and will likely use the minimum number of calls possible for a nationwide search.  
 
 #### Pictures don't consume API calls. 
 The pictures you can browse are direct links to the dealership-hosted listing, so
@@ -243,24 +235,27 @@ vefi/
 tests/                 pytest suite for the pure logic
 ```
 
-## Running the tests
+## A bit of backstory on this project and what you can expect going forward
 
-```bash
-pip install pytest
-pytest
-```
+VeFi started as a personal exercise to learn Python. At that time LLMs were just chat
+boxes on webpages, so I developed it interactively with AI acting as a sort of stack
+overflow tech support resource.   
 
-The suite covers the pure logic (transform, usage counter, search library,
-option decode, pricing) and runs against throwaway temp directories, so it never
-touches your real data or makes network calls.
+Eventually the functionality got to a state that VeFi actually assisted in my own 
+car purchase. All the core functionality was there but it required a lot of fiddling.
+To save a search you had to manually rename files. API keys were hardcoded into 
+the Python script. There was no drop down for make/model, so you had to get it 
+right or waste API calls on typos.  
 
-## A note on API quotas
+Sadly, my skill with AI has increased faster than my Python coding skills.  I finally
+decided it was time to clean this up to the state that other might conceivable be
+able to get it running and get some value, and this included heavy use of 
+Claude Code Opus 4.8 to refactor the one massive script into a more traditional project
+layout.  
 
-MarketCheck's free tier is limited. VeFi caches aggressively (searches, VIN
-decodes, photos, and listing details are all stored locally and reused) and shows
-a running call count so you can stay under your limit. The monthly limit shown in
-the meter is just for the display — set it to match your plan on the Settings
-page.
+I don't have any grand plans for this moving forward. I'm just putting it out there for 
+people to use, or not use, or build on top of, or not.  
+
 
 ## License
 
