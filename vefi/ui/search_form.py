@@ -112,8 +112,8 @@ def _nationwide_confirm() -> None:
 
     st.subheader("Confirm nationwide search")
     st.markdown(
-        f"A nationwide search sweeps all **{est.region_count}** regions. I probed "
-        f"**{est.sample_size}** of them (**{est.sample_calls}** API calls used), and they "
+        f"A nationwide search sweeps all **{est.region_count}** regions. VeFi sampled "
+        f"**{est.sample_size}** of them (**{est.sample_calls}** API calls used), which "
         f"ranged **{est.min_pages}–{est.max_pages}** pages each (avg {est.avg_pages}). "
         f"Completing the full search is estimated to require about "
         f"**~{est.projected_calls} API calls**."
