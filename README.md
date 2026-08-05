@@ -32,7 +32,7 @@ When you search for cars in VeFi,you get back everything you need to compare car
 based on the data that matters for **your** search --summarized, organized, and 
 easily digested.
 
-### The Price/Mile Graph
+### The Price/Mile graph
 Cars with less miles are worth more. But how much more?  VeFi plots every car
 on a Price/Miles graph and shows you the trendline that instantly reveals whether
 cars are above or below that trendline. 
@@ -171,10 +171,17 @@ For every listing you view, you will have the option to pull back this informati
 you want, consuming extra API calls. Once you pull it back once, it is cached on your
 machine. 
 
-### Saved Searches
+### Saved searches
 When you spend precious API calls on a search, VeFi lets you save those
 results.  Once saved you can reload them again to analyze further without spending more
 API calls.  Of course you will only get new listings by doing new searches.  
+
+### Make/Model drop downs
+The MarketCheck API does not accept "close enough" when inputting make/model names.  Querying
+MarketCheck to get back the canonical list of makes and models does also require API calls. 
+This project contains valid make models as of August 2026, however if you use VeFi over time
+you will need to refresh the data to pick up new vehicles to market.  This can be done
+from the Settings tab. 
 
 ## Requirements
 
