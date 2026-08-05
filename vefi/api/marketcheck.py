@@ -205,6 +205,25 @@ def listing_extra(listing_id: str, seller_type: str) -> dict:
     return resp.json()
 
 
+def region_count(base_url: str, params: dict, lat: float, lng: float) -> int:
+    """Return ``num_found`` for a single lat/lng region using one cheap call.
+
+    Requests ``rows=0`` so no listings are downloaded — just the count, which is
+    enough to compute how many pages (and therefore API calls) that region would
+    need. Used to estimate a nationwide search's cost before committing to it.
+    """
+    p = dict(params)
+    p["latitude"] = lat
+    p["longitude"] = lng
+    p.pop("zip", None)
+    p["rows"] = 0
+    p["start"] = 0
+    resp = _request(base_url, p)
+    if resp.status_code != 200:
+        raise MarketCheckError(f"Region probe failed: HTTP {resp.status_code}")
+    return int(resp.json().get("num_found", 0))
+
+
 def facet_terms(field: str, filters: Optional[dict] = None, limit: int = 1000) -> list[str]:
     """Return the unique taxonomy terms for ``field`` via a single metered facet call.
 

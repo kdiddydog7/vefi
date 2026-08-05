@@ -51,7 +51,7 @@ USAGE_FILE = CONFIG_DIR / "usage.json"
 # MarketCheck's free tier historically allows a limited number of calls per
 # month. This is user-configurable in the Settings page; it only drives the
 # progress meter, it does not block requests.
-DEFAULT_MONTHLY_CALL_LIMIT = 1000
+DEFAULT_MONTHLY_CALL_LIMIT = 500
 
 
 def ensure_dirs() -> None:

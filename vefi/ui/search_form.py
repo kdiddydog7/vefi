@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import streamlit as st
 
-from .. import search as search_service, taxonomy
+from .. import search as search_service, taxonomy, usage
 from ..data import library
 from ..search import SearchCriteria
+from ..settings_store import get_monthly_limit
 from . import state
 
 ANY = taxonomy.ANY
@@ -20,6 +21,11 @@ def render() -> None:
     returns nothing. This is a plain widget layout (not ``st.form``) so the model
     list can react to the selected make.
     """
+    # A nationwide search is gated by a cost estimate + confirmation (see below).
+    if st.session_state.get("nw_pending"):
+        _nationwide_confirm()
+        return
+
     st.subheader("New Search")
 
     all_makes = taxonomy.makes()
@@ -67,7 +73,72 @@ def render() -> None:
         zip_code=zip_code.strip(),
         seller_types=[s.lower() for s in seller_types],
     )
-    _run(criteria)
+    # A nationwide search can balloon into hundreds of paginated calls, so estimate
+    # the cost first and ask for confirmation. A ZIP search is bounded — run it.
+    if criteria.is_nationwide:
+        _prepare_nationwide(criteria)
+    else:
+        _run(criteria)
+
+
+def _prepare_nationwide(criteria: SearchCriteria) -> None:
+    status = st.empty()
+    bar = st.progress(0.0)
+
+    def progress(done: int, total: int, message: str) -> None:
+        status.text(message)
+        bar.progress(min(done / total, 1.0) if total else 0.0)
+
+    try:
+        with st.spinner("Estimating how many API calls this nationwide search needs…"):
+            estimate = search_service.estimate_nationwide(criteria, progress=progress)
+    except Exception as exc:
+        status.empty()
+        bar.empty()
+        st.error(f"Couldn't estimate the search: {exc}")
+        return
+    status.empty()
+    bar.empty()
+    st.session_state.nw_pending = {"criteria": criteria, "estimate": estimate}
+    st.rerun()
+
+
+def _nationwide_confirm() -> None:
+    pending = st.session_state.nw_pending
+    est = pending["estimate"]
+    used = usage.month_count()
+    limit = get_monthly_limit()
+    remaining = max(limit - used, 0)
+
+    st.subheader("Confirm nationwide search")
+    st.markdown(
+        f"A nationwide search sweeps all **{est.region_count}** regions. I probed "
+        f"**{est.sample_size}** of them (**{est.sample_calls}** API calls used), and they "
+        f"ranged **{est.min_pages}–{est.max_pages}** pages each (avg {est.avg_pages}). "
+        f"Completing the full search is estimated to require about "
+        f"**~{est.projected_calls} API calls**."
+    )
+    st.markdown(
+        f"You have **{remaining}** of your **{limit}** monthly MarketCheck calls "
+        f"remaining ({used} used)."
+    )
+    if est.projected_calls > remaining:
+        st.error(
+            "⚠️ This is estimated to **exceed your remaining calls this month**. "
+            "Consider cancelling and narrowing your search (add a body type, a tighter "
+            "year range, or search a ZIP + radius instead of nationwide)."
+        )
+    else:
+        st.info("This fits within your remaining calls for the month.")
+    st.caption("Estimate only — actual cost depends on how listings cluster by region.")
+
+    col_go, col_cancel = st.columns(2)
+    if col_go.button("Continue — run the full search", type="primary", width="stretch"):
+        st.session_state.nw_pending = None
+        _run(pending["criteria"])
+    if col_cancel.button("Cancel & refine search", width="stretch"):
+        st.session_state.nw_pending = None
+        st.rerun()
 
 
 def _run(criteria: SearchCriteria) -> None:
