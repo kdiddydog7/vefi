@@ -19,9 +19,9 @@ VeFi is an open-source used-car search and analysis tool built to use the [Marke
 API. 
 
 VeFi fills some very specific gaps in the car shopping experience for people that 
-are shopping for special cars.  
+are searching for special cars.  
 
-When you shop on any of the major car listing sites, after some time you begin
+When you browse on any of the major car listing sites, after some time you begin
 to realize that the experience is actually designed to benefit the
 dealerships paying for listings, not the consumer. If you've ever
 copy-pasted details out of cartrader, carguru, truecar, etc., into a spreadsheet
