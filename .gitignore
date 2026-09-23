@@ -1,6 +1,6 @@
 # ---- VeFi user data & runtime artifacts (never publish) ----
 # Local search library (per-user saved searches: params + parquet + raw JSON)
-data/
+/data/
 # Per-VIN caches (VIN decode, listing extras, image links)
 extra/
 # Legacy pre-refactor code & the user's personal saved searches
